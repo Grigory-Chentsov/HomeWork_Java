@@ -1,54 +1,117 @@
-import java.util.List;
+import java.sql.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
-/* Дана json строка [{ "фамилия":"Иванов","оценка":"5","предмет":"Математика"},{"фамилия":"Петрова","оценка":"4",
-"предмет":"Информатика"},{"фамилия":"Краснов","оценка":"5","предмет":"Физика"}]
-Задача написать метод(ы), который распарсит строку и выдаст ответ вида:
-Студент Иванов получил 5 по предмету Математика.
-Студент Петрова получил 4 по предмету Информатика.
-Студент Краснов получил 5 по предмету Физика.
-
-Используйте StringBuilder для подготовки ответа
-
-Исходная json строка это просто String !!! Для работы используйте методы String, такие как replace, split, substring
-и т.д. по необходимости
-
-Создать метод, который запишет результат работы в файл. Обработайте исключения и запишите ошибки в лог файл.
-2. *Получить исходную json строку из файла, используя FileReader или Scanner
-3. *Реализуйте алгоритм сортировки пузырьком числового массива, результат после каждой итерации запишите в лог-файл. */
+/* 1-Пусть дан произвольный список целых чисел, удалить из него четные числа.
+   2-Задан целочисленный список ArrayList. Найти минимальное, максимальное и среднее арифметическое из этого списка.
+     Collections.max()
+   3-Заполнить список названиями планет Солнечной системы в произвольном порядке с повторениями. Вывести название каждой
+     планеты и количество его повторений в списке.
+   * Реализовать алгоритм сортировки слиянием */
 public class Main {
     public static void main(String[] args) {
-        parseJson();
+//        task1(11);
+//        task2(10);
+//        task3(18);
+        star();
     }
-    static void parseJson() {
-        String jsonString =  "[{\"фамилия\":\"Иванов\",\"оценка\":\"5\",\"предмет\":\"Математика\"}, " +
-                             "{\"фамилия\":\"Петрова\",\"оценка\":\"4\",\"предмет\":\"Информатика\"}, " +
-                             "{\"фамилия\":\"Краснов\",\"оценка\":\"5\",\"предмет\":\"Физика\"}]";
-        // Удаляем квадратные скобки в начале и конце строки
-        jsonString = jsonString.substring(1, jsonString.length() - 1);
-        // Разбиваем строку на массив строк по запятой и пробелу
-        String[] studentStrings = jsonString.split(", ");
-        // Создаем StringBuilder для подготовки ответа
-        StringBuilder sb = new StringBuilder();
-        // Проходим по каждой строке студента
-        for (String studentString : studentStrings) {
-            // Удаляем кавычки в начале и конце строки
-            studentString = studentString.substring(1, studentString.length() - 1);
-            // Разбиваем строку на массив строк по двоеточию и пробелу
-            String[] keyValueStrings = studentString.split(",|:");
-            // Получаем фамилию, оценку и предмет из массива строк
-            String surname = keyValueStrings[1].replace("\"", "");
-            String mark = keyValueStrings[3].replace("\"", "");
-            String subject = keyValueStrings[5].replace("\"", "");
-            // Добавляем информацию о студенте в StringBuilder
-            sb.append("Студент ")
-                    .append(surname)
-                    .append(" получил ")
-                    .append(mark)
-                    .append(" по предмету ")
-                    .append(subject)
-                    .append(".\n");
+
+    static void task1(int size) {
+        List<Integer> numbers = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            numbers.add((int) (Math.random() * 100));
         }
-        // Выводим ответ
-        System.out.println(sb.toString());
+        for (int i = 0; i < numbers.size(); i++) {
+            if (numbers.get(i) % 2 == 0) {
+                numbers.remove(i);
+            }
+        }
+        System.out.println(numbers);
+    }
+
+    static void task2(int size) {
+        List<Integer> numbers = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            numbers.add((int) (Math.random() * 100));
+        }
+        double summ = 0;
+        for (int i = 0; i < numbers.size(); i++) {
+            summ += numbers.get(i);
+        }
+        System.out.println(numbers);
+        System.out.println(Collections.min(numbers));
+        System.out.println(Collections.max(numbers));
+        System.out.println(summ / numbers.size());
+    }
+
+    static void task3(int size) {
+        String[] planets = new String[]{"Меркурий", "Венера", "Земля", "Марс", "Юпитер", "Сатурн", "Уран", "Нептун", "Плутон"};
+        List<String> list_planets = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list_planets.add(planets[(int) (Math.random() * planets.length)]);
+        }
+        System.out.println(list_planets);
+        int count = 0;
+        String planet = "";
+        for (int i = 0; i < planets.length; i++) {
+            planet = planets[i];
+            for (int j = 0; j < list_planets.size(); j++) {
+                if (list_planets.get(j).equalsIgnoreCase(planet)) {
+                    count++;
+                }
+            }
+            System.out.println(planet + ": " + count);
+            count = 0;
+        }
+//        Map<String, Integer> frequency = list_planets.stream()
+//                // собираем элементы листа в карту
+//                .collect(Collectors.toMap(
+//                        // ключ - строка
+//                        e -> e,
+//                        // значение - число,
+//                        // количество вхождений
+//                        e -> 1,
+//                        // суммируем количество вхождений
+//                        Integer::sum));
+//
+//        // Обходим карту и выводим содержимое
+//        frequency.forEach((k, v) -> System.out.println(k + ": " + v));
+    }
+
+    static void star() {
+        int[] array1 = {8, 0, -3, 5, 6, 9, 8, -4, 2, -99, 43};
+        int[] result = star_mergesort(array1);
+        System.out.println(Arrays.toString(result));
+    }
+    static int[] star_mergesort(int[] array1) {
+        int[] buffer1 = Arrays.copyOf(array1, array1.length);
+        int[] buffer2 = new int[array1.length];
+        int[] result = star_mergesortInner(buffer1, buffer2, 0, array1.length);
+        return result;
+    }
+    static int[] star_mergesortInner(int[] buffer1, int[] buffer2, int startIndex, int endIndex) {
+        if (startIndex >= endIndex - 1) {
+            return buffer1;
+        }
+        // уже отсортирован.
+        int middle = startIndex + (endIndex - startIndex) / 2;
+        int[] sorted1 = star_mergesortInner(buffer1, buffer2, startIndex, middle);
+        int[] sorted2 = star_mergesortInner(buffer1, buffer2, middle, endIndex);
+        // Слияние
+        int index1 = startIndex;
+        int index2 = middle;
+        int destIndex = startIndex;
+        int[] result = sorted1 == buffer1 ? buffer2 : buffer1;
+        while (index1 < middle && index2 < endIndex) {
+            result[destIndex++] = sorted1[index1] < sorted2[index2]
+                    ? sorted1[index1++] : sorted2[index2++];
+        }
+        while (index1 < middle) {
+            result[destIndex++] = sorted1[index1++];
+        }
+        while (index2 < endIndex) {
+            result[destIndex++] = sorted2[index2++];
+        }
+        return result;
     }
 }
