@@ -1,62 +1,43 @@
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
+import java.util.*;
 
-/* 1.Пусть дан LinkedList с несколькими элементами. Реализуйте метод, который вернет “перевернутый” список.
-   Постараться не обращаться к листу по индексам.
-   2.Реализуйте очередь с помощью LinkedList со следующими методами: enqueue() - помещает элемент в конец очереди,
-   dequeue() - возвращает первый элемент из очереди и удаляет его, first() - возвращает первый элемент из очереди,
-   не удаляя.
-   3.Найдите сумму всех элементов LinkedList, сохраняя все элементы в списке. Используйте итератор
-   * реализовать вторую задачу через собственный класс используя в основе массив */
+/* 1. Реализуйте структуру телефонной книги с помощью HashMap, учитывая, что 1 человек может иметь несколько телефонов.
+   2. Пусть дан список сотрудников: Иван Иванов, Светлана Петрова, Кристина Белова, Анна Мусина, Анна Крутова, Иван Юрин,
+   Петр Лыков, Павел Чернов, Петр Чернышов, Мария Федорова, Марина Светлова, Мария Савина, Мария Рыкова, Марина Лугова,
+   Анна Владимирова, Иван Мечников, Петр Петин, Иван Ежов. Написать программу, которая найдет и выведет повторяющиеся
+   имена с количеством повторений. Отсортировать по убыванию популярности. Для сортировки использовать TreeMap.
+   * Реализовать алгоритм пирамидальной сортировки (HeapSort)
+   ** На шахматной доске расставить 8 ферзей так, чтобы они не били друг друга. */
 public class Main {
     public static void main(String[] args) {
-//        task1("Пусть дан LinkedList с элементами. Создайте метод, который вернет “перевернутый” список.");
-//        task2();
-        System.out.println(task3());
+//        task1();
+        task2();
     }
-    static void task1(String text) {
-        LinkedList<String> list = new LinkedList<>();
-        String[] words = text.replace(".","").split(" ");
-        for (String word: words) {
-            list.add(word);
-        }
-        System.out.println(list.toString());
-        LinkedList<String> list_reversed = new LinkedList<>();
-        for (String item: list) {
-            list_reversed.addFirst(item);
-        }
-        System.out.println(list_reversed.toString());
+
+    static void task1() {
+        Map<String, String> phone_book = new HashMap<>();
+        phone_book.put("123456", "Grigor");
+        System.out.println(phone_book);
+        phone_book.put("234567", "Grigor");
+        phone_book.put("345678", "Grigor");
+        System.out.println(phone_book);
     }
 
     static void task2() {
-        MyQueue myQueue = new MyQueue();
-        myQueue.enqueue(1);
-        myQueue.enqueue(2);
-        myQueue.enqueue(3);
-        myQueue.enqueue(4);
-        System.out.println(myQueue.first());
-        System.out.println(myQueue.dequeue());
-        System.out.println(myQueue.first());
-        System.out.println(myQueue);
+        List<String> employees = Arrays.asList(
+                "Иван Иванов", "Светлана Петрова", "Кристина Белова", "Анна Мусина", "Анна Крутова", "Иван Юрин",
+                "Петр Лыков", "Павел Чернов", "Петр Чернышов", "Мария Федорова", "Марина Светлова", "Мария Савина",
+                "Мария Рыкова", "Марина Лугова", "Анна Владимирова", "Иван Мечников", "Петр Петин", "Иван Ежов"
+        );
+
+        Map<String, Integer> nameCounts = new TreeMap<>();
+
+        for (String employee : employees) {
+            nameCounts.put(employee.split(" ")[0], nameCounts.getOrDefault(employee.split(" ")[0], 0) + 1);
+        }
+
+        nameCounts.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEach(System.out::println);
     }
 
-    static Integer task3() {
-        LinkedList<Integer> list = new LinkedList<>();
-        Random r = new Random();
-        for (int i = 0; i < 10; i++) {
-            list.add(r.nextInt(100));
-        }
-        System.out.println(list);
-        int sum = 0;
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Object item = iterator.next();
-            if (item instanceof Integer) {
-                sum += (int) item;
-            }
-        }
-        return sum;
-    }
 }
